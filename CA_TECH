@@ -1,0 +1,84 @@
+#!groovy
+
+node('slave_CA_notejam') {
+    /*stage('Clean Environment') {
+        cleanWs()
+    }
+    
+    stage('Code Check Out') {
+		withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'jenkins-service-account', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+			sh label: '', script: '''git config --global credential.helper \'!aws --profile assume_mobile codecommit  credential-helper $@\''''
+	*///		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'jenkins-service-codecommit', url: 'https://git-codecommit.eu-central-1.amazonaws.com/v1/repos/ma_android-platform']]])
+	/*	} 
+	}*/
+
+	/*stage('SonarQube Code Analysis') {   
+		echo 'Analysing code...'   
+		withSonarQubeEnv('SonarQube') {   
+			sh returnStdout: true, script: '''
+			    gradle wrapper
+				./gradlew sonarqube -x compileDebugAndroidTestKotlin -x compileDebugUnitTestKotlin -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.projectKey=${JOB_BASE_NAME} -Dsonar.projectName=$JOB_BASE_NAME -Dsonar.projectVersion=1.0-SNAPSHOT
+			'''   
+		sleep 10; 
+		}   
+	}*/
+	
+	stage('SonarQube Code Analysis') {   
+		echo 'Analysing code...'   
+		withSonarQubeEnv('SonarQube') {   
+			sh returnStdout: true, script: '''
+			    gradle wrapper
+				./gradlew sonarqube -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.projectKey=${JOB_BASE_NAME} -Dsonar.projectName=$JOB_BASE_NAME -Dsonar.projectVersion=1.0-SNAPSHOT
+			'''   
+		sleep 10; 
+		}   
+	}
+        
+	stage("SonarQube Quality-Gate Validation") {   
+		echo 'Quality Gate Verification...'   
+		timeout(time: 1, unit: 'MINUTES') {   
+			def qg = waitForQualityGate()   
+			if (qg.status != 'OK') {   
+				error "Pipeline aborted due to quality gate failure: ${qg.status}"   
+			}   
+		}   
+	}
+
+	stage('Build') {   
+		echo 'Building ..'   
+		sh returnStdout: true, script: ''' 
+			./gradlew clean assembleDebug
+		'''
+	}
+	
+	stage('Push .APK to Nexus') {
+	    withEnv([
+	        'NEXUS_CREDS=nexus-service-account',
+	        'NEXUS_URL=artifacts.le.tnt.bank.ikano',
+	        'NEXUS_REPO=maven-snapshots',
+	        'NEXUS_PROTOCOL=https',
+	        'NEXUS_VERSION=nexus3'
+	    ]) {
+	        filesByGlob = findFiles(glob: "app/build/outputs/apk/debug/*.apk");
+            artifactPath = filesByGlob[0].path;
+            artifactExists = fileExists artifactPath
+            if(artifactExists) {
+                nexusArtifactUploader(
+                    nexusVersion: NEXUS_VERSION,
+                    protocol: NEXUS_PROTOCOL,
+                    nexusUrl: NEXUS_URL,
+                    groupId: 'com.ikano.ipay.mobile',
+                    version: '1.0-SNAPSHOT',
+                    repository: NEXUS_REPO,
+                    credentialsId: NEXUS_CREDS,
+                    artifacts: [
+                        [artifactId: 'ma_android-platform',
+                        type: 'apk',
+                        file: artifactPath,
+                        classifier: '']
+                    ]
+                )
+            }
+        }
+	}
+}
