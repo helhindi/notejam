@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           path: ./spring
           file: ./spring/Dockerfile
-          registry: registry.hub.docker.com
+          registry: index.docker.io/v1/
           repository: elhindi
           tag_with_ref: true
           tag_with_sha: true
