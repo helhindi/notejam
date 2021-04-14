@@ -43,5 +43,3 @@ jobs:
           context: ./spring
           tags: elhindi/notejam:latest
           push: true
-          tag_with_ref: true
-          tag_with_sha: true

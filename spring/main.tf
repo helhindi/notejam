@@ -4,7 +4,7 @@ terraform {
 
 provider "aws" {
   version = ">= 2.28.1"
-  profile = "personal"
+  profile = var.profile
   region  = var.region
 }
 
@@ -177,6 +177,5 @@ workers_group_defaults = {
 resource "null_resource" "DB-init" {
   provisioner "local-exec" {
     command = "mysql -u ${var.DBUSER} -p${var.DBPASSWORD} -h ${aws_db_instance.notejam.endpoint} < ../schema.sql"
-    environment {}
   }
 }

@@ -1,0 +1,6 @@
+# brew 'python@3.9' Uncomment if you wish to have this installed
+brew 'awscli@2.1.37' # Requires 'python@3.9'
+brew 'terraform@0.13.6'
+brew 'kubernetes-cli@1.21.0'
+brew 'skaffold@1.21.0'
+brew 'mysql@5.7'
