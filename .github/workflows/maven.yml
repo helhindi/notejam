@@ -68,6 +68,7 @@ jobs:
         repo: notejam
         region: eu-west-2
         tags: latest,${{ github.sha }}
+        path: ./spring
         create_repo: true
         set_repo_policy: true
         repo_policy_file: repo-policy.json
