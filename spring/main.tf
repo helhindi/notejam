@@ -81,6 +81,13 @@ data "aws_subnet_ids" "private" {
     }
 }
 
+data "aws_subnet_ids" "public" {
+    vpc_id = module.vpc.vpc_id
+    tags = {
+      tier = "public"
+    }
+}
+
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "worker_group_mgmt"
   vpc_id      = module.vpc.vpc_id
@@ -118,7 +125,7 @@ resource "aws_security_group" "notejam-rds" {
 
 resource "aws_db_subnet_group" "notejam" {
   name       = "notejam"
-  subnet_ids = data.aws_subnet_ids.private.ids
+  subnet_ids = data.aws_subnet_ids.public.ids
 }
 
 resource "aws_db_instance" "notejam" {
