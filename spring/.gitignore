@@ -1,4 +1,5 @@
 /target/
+.terraform/
 application.properties
 db.*
 *.code-workspace
