@@ -6,14 +6,19 @@ variable region {
   default = "eu-west-2"
 }
 
-variable db_username {
+variable DBUSER {
   description = "Database username"
   type        = string
 }
 
-variable db_password {
+variable DBPASSWORD {
   description = "Database password"
   type        = string
+}
+
+variable app_name {
+  description = "Name of the application"
+  default     = "notejam"
 }
 
 variable "map_accounts" {

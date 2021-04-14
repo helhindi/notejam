@@ -132,8 +132,8 @@ resource "aws_db_instance" "notejam" {
   publicly_accessible       = true
   db_subnet_group_name      = aws_db_subnet_group.notejam.name
   vpc_security_group_ids    = [aws_security_group.worker_group_mgmt.id, aws_security_group.notejam-rds.id]
-  username                  = var.db_username
-  password                  = var.db_password
+  username                  = var.DBUSER
+  password                  = var.DBPASSWORD
 }
 
 provider "mysql" {
@@ -172,4 +172,12 @@ workers_group_defaults = {
   map_roles                            = var.map_roles
   map_users                            = var.map_users
   map_accounts                         = var.map_accounts
+}
+
+resource "null_resource" "DB-init" {
+  provisioner "local-exec" {
+    command = "${aws_db_instance.notejam.endpoint}"
+    command = "mysql -u ${var.DBUSER} -p${var.DBPASSWORD} -h ${aws_db_instance.notejam.endpoint} < ../schema.sql"
+    environment {}
+  }
 }
