@@ -45,6 +45,6 @@ jobs:
           path: ./spring
           file: ./spring/Dockerfile
           registry: docker.io
-          repository: github.com/helhindi/notejam.git
+          repository: elhindi
           tag_with_ref: true
           tag_with_sha: true
