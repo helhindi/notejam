@@ -1,6 +1,7 @@
 /target/
-db.*
 application.properties
+db.*
+*.code-workspace
 *.tfstate
 *.tfstate.backup
 *kubeconfig*
