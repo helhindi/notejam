@@ -9,6 +9,9 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     name: Running compilation
+    defaults:
+      run:
+        working-directory: spring
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -22,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Running tests
     needs: compile
+    defaults:
+      run:
+        working-directory: spring
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -35,6 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Run mvn build
     needs: test
+    defaults:
+      run:
+        working-directory: spring
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
