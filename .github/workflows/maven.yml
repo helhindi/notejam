@@ -53,12 +53,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Build/push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v5
-        with:
-          image: elhindi/notejam
-          tags: v0.4, latest
-          registry: docker.io
-          dockerfile: spring/Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: Build/push Docker image
+      #   uses: mr-smithers-excellent/docker-build-push@v5
+      #   with:
+      #     image: elhindi/notejam
+      #     tags: v0.4, latest
+      #     registry: docker.io
+      #     dockerfile: ./spring/Dockerfile
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Lint
+        uses: luke142367/Docker-Lint-Action@v0.1.0
+
+      - name: Build/Push Docker image
+        uses: opspresso/action-docker@master
+        env:
+          USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: "elhindi/notejam"
+          TAG_NAME: "v0.4"
+          LATEST: "true"
