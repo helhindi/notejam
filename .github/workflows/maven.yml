@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           path: ./spring
           file: ./spring/Dockerfile
-          tags: notejam:latest
+          tags: elhindi/notejam:latest
           registry: index.docker.io/v2
           repository: elhindi
           tag_with_ref: true
