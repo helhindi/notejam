@@ -6,6 +6,10 @@ variable region {
   default = "eu-west-2"
 }
 
+variable profile {
+  default = "dev"
+}
+
 variable DBUSER {
   description = "Database username"
   type        = string
