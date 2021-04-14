@@ -1,7 +1,7 @@
 FROM maven:3.5.2-jdk-8-alpine AS BUILDER
 WORKDIR /notejam/
-COPY ../../spring/pom.xml /notejam
-COPY ../../spring/src /notejam/src
+COPY pom.xml /notejam
+COPY src /notejam/src
 RUN mvn clean package -DskipTests=true
 
 FROM openjdk:8-jre-alpine
