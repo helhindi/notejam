@@ -176,7 +176,6 @@ workers_group_defaults = {
 
 resource "null_resource" "DB-init" {
   provisioner "local-exec" {
-    command = "${aws_db_instance.notejam.endpoint}"
     command = "mysql -u ${var.DBUSER} -p${var.DBPASSWORD} -h ${aws_db_instance.notejam.endpoint} < ../schema.sql"
     environment {}
   }
