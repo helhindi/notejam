@@ -40,8 +40,7 @@ jobs:
       - name: Publish image
         uses: docker/build-push-action@v2
         with:
-          path: ./spring
-          file: ./spring/Dockerfile
+          context: ./spring
           tags: elhindi/notejam:latest
           push: true
           tag_with_ref: true
