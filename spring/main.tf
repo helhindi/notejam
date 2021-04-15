@@ -36,12 +36,13 @@ module "public_subnets" {
 
 module "private_subnets" {
   source = "cloudposse/multi-az-subnets/aws"
-  stage              = var.environment
-  name               = "${var.app_name} private subnets"
-  availability_zones = data.aws_availability_zones.available.names
-  vpc_id             = module.vpc.vpc_id
-  cidr_block         = local.private_cidr_block
-  type               = "private"
+  stage               = var.environment
+  name                = "${var.app_name} private subnets"
+  availability_zones  = data.aws_availability_zones.available.names
+  vpc_id              = module.vpc.vpc_id
+  cidr_block          = local.private_cidr_block
+  nat_gateway_enabled = "true"
+  type                = "private"
 
   az_ngw_ids = module.public_subnets.az_ngw_ids
 }
@@ -105,7 +106,7 @@ module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = local.cluster_name
   cluster_version = "1.19"
-  subnets         = values(module.public_subnets.az_subnet_ids)[*]
+  subnets         = values(module.private_subnets.az_subnet_ids)[*]
 
   tags = {
     Environment = var.environment

@@ -33,7 +33,7 @@ Install `'aws-cli' (requires 'python 3.9'), 'terraform', 'kubectl', 'mysql', 'sk
 Once you've installed `aws-cli` (via `brew`/other); run `aws configure` to setup your credentials and profiles.
 `terraform` cli relies on AWS profiles and added to `dev.tfvars` prior to launch.
 
-Refer to https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html for details of adding a profile in your `~/.aws/credentials` file
+Further details can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 #### Initialise and create base infrastructure:
 ```
   terraform init
@@ -44,7 +44,7 @@ Once happy with the output; apply the change using:
   terraform apply --vars-file dev.tfvars
 ```
 
-#### Set env vars & initialise the DB
+#### Set env vars & initialise the DB:
 
 **Note:** `db_user` & `db_password` should already be in your `dev.tfvars`. (Refer to `terraform` output for `db_host` and `db_name`).
 Run the following (remembering to replace all `SET_ME` values):
@@ -54,7 +54,7 @@ mysql -h $db_host -u $db_user -p$db_password $db_name < ./new-schema.sql
 ```
 
 #### Deploy to k8s cluster:
-Assuming the EKS cluster is up; authenticate and connect via `kubectl` and deploy your code using:
+Assuming the EKS cluster is up; [authenticate and connect](https://aws.amazon.com/premiumsupport/knowledge-center/eks-cluster-connection/) via `kubectl` and deploy your code using:
 ```
   skaffold run (or 'skaffold dev' if you want to see code changes deployed immediately)
 ```
@@ -65,6 +65,7 @@ Start by port forwarding traffic from `notejam-service` to your terminal via:
   kubectl port-forward svc/notejam-service 80:8080
   curl localhost:8080
 ```
+
 ---
 ###### To do:
 - CloudFront: Create Distribution with headers restricting access to the ALB ingress (to clients with the correct header)

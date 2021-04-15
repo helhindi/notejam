@@ -6,6 +6,8 @@ locals {
 
   charts_incubator_repo   = "https://charts.helm.sh/incubator"
 
+  current_time = timestamp()
+
   tags_map = merge(
     {
       environment         = var.environment
