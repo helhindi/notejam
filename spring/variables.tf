@@ -10,12 +10,12 @@ variable profile {
   default = "dev"
 }
 
-variable DBUSER {
+variable db_user {
   description = "Database username"
   type        = string
 }
 
-variable DBPASSWORD {
+variable db_password {
   description = "Database password"
   type        = string
 }
