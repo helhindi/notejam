@@ -5,13 +5,13 @@
 This repo is a modified clone of https://github.com/nordcloud/notejam
 It aims to add a provisional infrastructure to help develop against and promote to production.
 
-The infrastructure is WIP and hence specific security elements such as CloudFront, SSL certificates and Ingress are pending. The `terrafom local-exec` which initialises the DB required public access (albeit temporarily). A specific To-do list is found below.
+The infrastructure is WIP and hence specific security elements such as CloudFront, SSL certificates and Ingress are pending. DB initialisation used public access (albeit temporarily). A specific To-do list is found below.
 
 ![Alt text](./notejam-arch-v0.1.png?raw=true "Notejam proposed architecture v0.1")
 
-## Getting Started
+## Getting started:
 **Note:** The instructions assume an OSX machine with `brew` installed.
-## Clone repo & install pre-req tools:
+
 From an OSX machine's Terminal; launch the following commands:
 ```
   git clone -b dev https://github.com/helhindi/notejam.git &&cd spring
