@@ -70,7 +70,7 @@ resource "aws_security_group" "notejam-rds" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -83,7 +83,7 @@ resource "aws_security_group" "notejam-rds" {
 
 resource "aws_db_subnet_group" "notejam" {
   name       = "notejam"
-  subnet_ids = flatten([[module.public_subnets.az_subnet_ids["eu-west-2b"]], [module.public_subnets.az_subnet_ids["eu-west-2b"]], [module.public_subnets.az_subnet_ids["eu-west-2b"]]])
+  subnet_ids = values(module.public_subnets.az_subnet_ids)[*]
 }
 
 resource "aws_db_instance" "notejam" {
@@ -105,7 +105,7 @@ module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = local.cluster_name
   cluster_version = "1.19"
-  subnets         = flatten(module.public_subnets.az_subnet_ids)
+  subnets         = values(module.public_subnets.az_subnet_ids)[*]
 
   tags = {
     Environment = var.environment
@@ -118,7 +118,7 @@ module "eks" {
   worker_groups = [
     {
       name                          = "worker-group-1"
-      instance_type                 = "t3.medium"
+      instance_type                 = "t3.small"
       asg_desired_capacity          = 2
       additional_security_group_ids = [aws_security_group.worker_group_mgmt.id]
     },
@@ -128,18 +128,7 @@ workers_group_defaults = {
   root_volume_type                  = "gp2"
 }
 
-  map_roles                            = var.map_roles
-  map_users                            = var.map_users
-  map_accounts                         = var.map_accounts
+  map_roles                         = var.map_roles
+  map_users                         = var.map_users
+  map_accounts                      = var.map_accounts
 }
-
-resource "null_resource" "DB-init" {
-  provisioner "local-exec" {
-    command = "mysql -u ${var.db_user} -p${var.db_password} -h ${aws_db_instance.notejam.endpoint} < ../schema.sql"
-  }
-}
-
-# Route53 - data check for hosted zone and create new record for app = ${app_name}
-# ACM - Ingress Controller
-# ALB - Ingress
-# CloudFront with exclusive access to ALB

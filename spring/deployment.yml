@@ -1,0 +1,106 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+  namespace: default
+  labels:
+    app: notejam
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notejam
+  revisionHistoryLimit: 100
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: notejam
+    spec:
+      containers:
+      - name: notejam
+        image: elhindi/notejam:latest
+        env:
+          - name: db_user
+            valueFrom:
+              configMapKeyRef:
+                name: notejam-config
+                key: db_user
+          - name: db_password
+            valueFrom:
+              configMapKeyRef:
+                name: notejam-config
+                key: db_password
+          - name: db_host
+            valueFrom:
+              configMapKeyRef:
+                name: notejam-config
+                key: db_host
+          - name: db_name
+            valueFrom:
+              configMapKeyRef:
+                name: notejam-config
+                key: db_name
+          - name: db_port
+            valueFrom:
+              configMapKeyRef:
+                name: notejam-config
+                key: db_port
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "600m"
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 2
+
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "notejam-service"
+  namespace: "default"
+  labels:
+    app: "notejam"
+spec:
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  selector:
+    app: "notejam"
+  type: ClusterIP
+
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "notejam-config"
+  namespace: "default"
+  labels:
+    app: "notejam"
+data:
+  db_name: "DB_NAME"
+  db_user: "DB_USER"
+  db_password: "DB_PASSWORD"
+  db_host: "DB_HOST"
+  db_port: "DB_PORT"

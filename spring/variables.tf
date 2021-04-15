@@ -1,13 +1,14 @@
-variable environment {
-  default = "dev"
-}
-
 variable region {
   default = "eu-west-2"
 }
 
 variable profile {
   default = "dev"
+}
+
+variable cidr_block {
+  description = "VPC cidr block to use"
+  default     = "10.0.0.0/16"
 }
 
 variable db_user {
