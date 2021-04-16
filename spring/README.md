@@ -75,6 +75,7 @@ Query the `notejam-service` URL via:
   kubectl -n default get svc notejam-service -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
 ```
 Curl or visit the URL provided
+
 ---
 ###### To do:
 1. **Logging/Monitoring:** (This was missed due to time) Use AWS CloudWatch logs + Container Insights to handle this.
