@@ -34,10 +34,12 @@ Install `'aws-cli' (requires 'python 3.9'), 'terraform', 'kubectl', 'mysql', 'sk
 
 #### Initialise `aws-cli`/`shell`:
 Once you've installed `aws-cli` (via `brew`/other); run `aws configure` to setup your credentials and profiles.
-`terraform` cli relies on AWS profiles and added to `dev.tfvars` prior to launch.
+**Note:** `terraform` cli relies on AWS profiles. A named AWS profile is required within `dev.tfvars`.
 
 Further details can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 #### Initialise and create base infrastructure:
+Modify `./dev.tfvars` and set `profile, environment, cid_block, db_user & db_password`
+
 ```
   terraform init
   terraform plan --vars-file dev.tfvars
@@ -48,7 +50,6 @@ Once happy with the output; apply the change using:
 ```
 
 #### Set env vars & initialise the DB:
-Modify `./dev.tfvars` to set the required vars `profile, environment, cid_block, db_user & db_password`
 
 **Note:** `db_user` & `db_password` should already be in your `dev.tfvars`. (Refer to `terraform` output for `db_host` and `db_name`).
 Run the following after replacing all `SET_ME` values:
@@ -75,7 +76,7 @@ Query the `notejam-service` URL via:
 ```
   kubectl -n default get svc notejam-service -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
 ```
-Curl or visit the URL provided
+Visit or `curl` the URL or run `kubectl get pods` to check the underlying hosts.
 
 ---
 ###### To do:
