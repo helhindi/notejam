@@ -77,8 +77,9 @@ Query the `notejam-service` URL via:
 Curl or visit the URL provided
 ---
 ###### To do:
-- CloudFront: Create Distribution with headers restricting access to the ALB ingress (to clients with the correct header)
-- Create Route 53 DNS record + ACM crtificates & label the Ingress
-- Ingress Controller: Deploy with labels containing `certificate arn` and `host` values. Paying attention to add a condition for CloudFront only access + specific headers
-- RDS: Revert to private subnets + Solve execution of DB initialisation & alter the current security group ingress to worker nodes only.
-- Docker registry: Switch to ECR by creating a repo and modify registry/image references.
+1. **Logging/Monitoring:** (This was missed due to time) Use AWS CloudWatch logs + Container Insights to handle this.
+2. **CloudFront:** Create Distribution with headers restricting access to the ALB ingress (to clients with the correct header).
+3. **Route 53/ACM crtificates:** Create records & label the Ingress.
+4. **Ingress Controller:** Deploy with labels containing `certificate arn` and `host` values. Paying attention to add a condition for CloudFront only access + specific headers.
+5. **RDS:** Revert to private subnets + Solve execution of DB initialisation & alter the current security group ingress to worker nodes only.
+6. **Docker registry:** Switch to ECR by creating a repo and modify registry/image references.
