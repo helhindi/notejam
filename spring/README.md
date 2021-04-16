@@ -2,7 +2,7 @@
 ![GitHub Actions status](https://github.com/helhindi/notejam/actions/workflows/maven.yml/badge.svg)
 ![GitHub Actions status](https://github.com/helhindi/notejam/actions/workflows/dependabot.yml/badge.svg)
 ## Introduction
-This repo is a modified clone of https://github.com/nordcloud/notejam
+This repo is a modified clone of https://github.com/nordcloud/notejam with modifications made to the `spring` directory.
 It aims to add a provisional infrastructure to help develop against and promote to production.
 
 A minimal Github Actions CI job is included in `../.github/wokflows/maven.yml`. Worth adding that I have removed the `mvn test` job due to failing tests.
@@ -16,7 +16,8 @@ The infrastructure is WIP and hence specific security pieces such as CloudFront,
 
 From an OSX machine's Terminal; launch the following commands:
 ```
-  git clone -b dev https://github.com/helhindi/notejam.git &&cd spring
+  git clone -b dev https://github.com/helhindi/notejam.git
+  cd notejam/spring
 ```
 
 #### Install `brew`:
@@ -54,7 +55,14 @@ Run the following (remembering to replace all `SET_ME` values):
 export db_host="SET_ME" db_name="SET_ME" db_user="SET_ME" db_password="SET_ME" db_port="3306"
 mysql -h $db_host -u $db_user -p$db_password $db_name < ./new-schema.sql
 ```
-
+Substitute `ConfigMap` vars with the above:
+```
+sed -i.bak -e "s|DB_NAME|$db_name|" \
+           -e "s|DB_HOST|$db_host|" \
+           -e "s|DB_PORT|$db_port|" \
+           -e "s|DB_USER|$db_user|" \
+           -e "s|DB_PASSWORD|$db_password|" deployment.yml
+```
 #### Deploy to k8s cluster:
 Assuming the EKS cluster is up; [authenticate and connect](https://aws.amazon.com/premiumsupport/knowledge-center/eks-cluster-connection/) via `kubectl` and deploy your code using:
 ```
@@ -62,12 +70,11 @@ Assuming the EKS cluster is up; [authenticate and connect](https://aws.amazon.co
 ```
 
 #### Test deployment:
-Start by port forwarding traffic from `notejam-service` to your terminal via:
+Query the `notejam-service` URL via:
 ```
-  kubectl port-forward svc/notejam-service 80:8080
-  curl localhost:8080
+  kubectl -n default get svc notejam-service -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
 ```
-
+Curl or visit the URL provided
 ---
 ###### To do:
 - CloudFront: Create Distribution with headers restricting access to the ALB ingress (to clients with the correct header)
