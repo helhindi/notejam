@@ -48,9 +48,10 @@ Once happy with the output; apply the change using:
 ```
 
 #### Set env vars & initialise the DB:
+Modify `./dev.tfvars` to set the required vars `profile, environment, cid_block, db_user & db_password`
 
 **Note:** `db_user` & `db_password` should already be in your `dev.tfvars`. (Refer to `terraform` output for `db_host` and `db_name`).
-Run the following (remembering to replace all `SET_ME` values):
+Run the following after replacing all `SET_ME` values:
 ```
 export db_host="SET_ME" db_name="SET_ME" db_user="SET_ME" db_password="SET_ME" db_port="3306"
 mysql -h $db_host -u $db_user -p$db_password $db_name < ./new-schema.sql
