@@ -81,3 +81,4 @@ Curl or visit the URL provided
 - Create Route 53 DNS record + ACM crtificates & label the Ingress
 - Ingress Controller: Deploy with labels containing `certificate arn` and `host` values. Paying attention to add a condition for CloudFront only access + specific headers
 - RDS: Revert to private subnets + Solve execution of DB initialisation & alter the current security group ingress to worker nodes only.
+- Docker registry: Switch to ECR by creating a repo and modify registry/image references.
