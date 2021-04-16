@@ -5,7 +5,9 @@
 This repo is a modified clone of https://github.com/nordcloud/notejam
 It aims to add a provisional infrastructure to help develop against and promote to production.
 
-The infrastructure is WIP and hence specific security elements such as CloudFront, SSL certificates and Ingress are pending. DB initialisation used public access (albeit temporarily). A specific To-do list is found below.
+A minimal Github Actions CI job is included in `../.github/wokflows/maven.yml`. Worth adding that I have removed the `mvn test` job due to failing tests.
+
+The infrastructure is WIP and hence specific security pieces such as CloudFront, SSL certificates and Ingress are pending. DB initialisation uses public access (to be fixed). A To-do list is found at the bottom of this README.
 
 ![Alt text](./notejam-arch-v0.1.png?raw=true "Notejam proposed architecture v0.1")
 
